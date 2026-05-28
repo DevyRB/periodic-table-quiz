@@ -165,7 +165,7 @@ header p{color:var(--sub);font-size:13px;margin-top:2px}
 <div class="container">
 <header>
   <h1>ตารางธาตุหมู่ A</h1>
-  <p>ทบทวนหมู่ IA – VIIIA · สัญลักษณ์ · ชื่ออังกฤษ · ชื่อไทย</p>
+  <p>ทบทวนหมู่ IA – VIIIA · สัญลักษณ์ · ชื่อไทย</p>
 </header>
 
 <div class="stats" id="stats">
@@ -192,14 +192,6 @@ header p{color:var(--sub);font-size:13px;margin-top:2px}
     <div class="input-wrap">
       <input type="text" id="inpSymbol" placeholder="เช่น H" autocomplete="off" spellcheck="false">
       <span class="icon" id="icoSymbol"></span>
-    </div>
-  </div>
-
-  <div class="input-group">
-    <label>ชื่อภาษาอังกฤษ</label>
-    <div class="input-wrap">
-      <input type="text" id="inpName" placeholder="เช่น Hydrogen" autocomplete="off" spellcheck="false">
-      <span class="icon" id="icoName"></span>
     </div>
   </div>
 
@@ -319,8 +311,8 @@ let done = [];   // state per element: null | 'correct' | 'wrong'
 let checked = false;
 
 const $ = id => document.getElementById(id);
-const inpSym = $('inpSymbol'), inpName = $('inpName'), inpThai = $('inpThai'), inpTrad = $('inpTrad');
-const icoSym = $('icoSymbol'), icoName = $('icoName'), icoThai = $('icoThai'), icoTrad = $('icoTrad');
+const inpSym = $('inpSymbol'), inpThai = $('inpThai'), inpTrad = $('inpTrad');
+const icoSym = $('icoSymbol'), icoThai = $('icoThai'), icoTrad = $('icoTrad');
 const grpBadge = $('groupBadge'), perTag = $('periodTag'), progText = $('progressText');
 const btnCheck = $('btnCheck'), btnAns = $('btnAnswer'), btnNext = $('btnNext');
 const thaiGrp = $('thaiGroup'), tradGrp = $('tradGroup');
@@ -384,9 +376,9 @@ function showQuestion(n){
   }
 
   // clear inputs
-  inpSym.value = ''; inpName.value = ''; inpThai.value = ''; inpTrad.value = '';
-  [inpSym,inpName,inpThai,inpTrad].forEach(el => { if(el) el.className=''; });
-  [icoSym,icoName,icoThai,icoTrad].forEach(el => { el.className='icon'; });
+  inpSym.value = ''; inpThai.value = ''; inpTrad.value = '';
+  [inpSym,inpThai,inpTrad].forEach(el => { if(el) el.className=''; });
+  [icoSym,icoThai,icoTrad].forEach(el => { el.className='icon'; });
 
   // buttons
   btnCheck.disabled = false;
@@ -428,23 +420,19 @@ function checkAnswer(){
   if(checked) return;
   const e = all[idx];
   const s = inpSym.value.trim();
-  const n = inpName.value.trim();
   const t = inpThai.value.trim();
 
   const okSym = s.toLowerCase() === e.sym.toLowerCase();
-  const okName = n.toLowerCase() === e.en.toLowerCase();
   const okThai = t.toLowerCase() === e.th.toLowerCase();
   const hasTrad = HAS_TRAD_THAI.has(e.sym);
   const trad = inpTrad.value.trim();
   const okTrad = hasTrad ? (trad.toLowerCase() === (e.thSp||'').toLowerCase()) : true;
 
-  // show results
   setField(inpSym, icoSym, okSym);
-  setField(inpName, icoName, okName);
   setField(inpThai, icoThai, okThai);
   if(hasTrad) setField(inpTrad, icoTrad, okTrad);
 
-  const allOk = okSym && okName && okThai && okTrad;
+  const allOk = okSym && okThai && okTrad;
   done[idx] = allOk ? 'correct' : 'wrong';
   updateStats();
 
@@ -477,9 +465,7 @@ function setField(inp, ico, ok){
 function showAnswer(){
   const e = all[idx];
   inpSym.value = e.sym;
-  inpName.value = e.en;
   setField(inpSym, icoSym, true);
-  setField(inpName, icoName, true);
   inpThai.value = e.th;
   setField(inpThai, icoThai, true);
   if( HAS_TRAD_THAI.has(e.sym) && e.thSp){
@@ -542,8 +528,7 @@ function restart(){
 // keyboard: Enter moves between inputs, then checks
 document.addEventListener('keydown', e => {
   if(e.key!=='Enter') return;
-  if(e.target===inpSym){ inpName.focus(); e.preventDefault(); return; }
-  if(e.target===inpName){ inpThai.focus(); e.preventDefault(); return; }
+  if(e.target===inpSym){ inpThai.focus(); e.preventDefault(); return; }
   if(e.target===inpThai && tradGrp.style.display!=='none'){ inpTrad.focus(); e.preventDefault(); return; }
   if(!btnCheck.disabled){ checkAnswer(); e.preventDefault(); }
   else if(!btnNext.disabled){ nextQuestion(); e.preventDefault(); }
