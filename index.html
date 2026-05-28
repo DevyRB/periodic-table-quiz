@@ -6,74 +6,36 @@
 <title>จำตารางธาตุหมู่ A</title>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f5f5f7;
-  --card: #ffffff;
-  --text: #1d1d1f;
-  --sub: #86868b;
-  --border: #e5e5ea;
-  --green: #34c759;
-  --red: #ff3b30;
-  --blue: #007aff;
-  --blue-hover: #0066d6;
-  --radius: 14px;
-  --shadow: 0 2px 12px rgba(0,0,0,0.06);
-}
+:root{--bg:#f5f5f7;--card:#fff;--text:#1d1d1f;--sub:#86868b;--border:#e5e5ea;--green:#34c759;--red:#ff3b30;--blue:#007aff;--blue-hover:#0066d6;--radius:14px;--shadow:0 2px 12px rgba(0,0,0,0.06)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:'Prompt','Sukhumvit Set',-apple-system,sans-serif;
-  background:var(--bg);color:var(--text);
-  min-height:100vh;display:flex;justify-content:center;padding:20px;
-}
+body{font-family:'Prompt',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;justify-content:center;padding:20px}
 .container{max-width:820px;width:100%}
-
-/* header */
-header{text-align:center;padding:24px 0 8px}
+header{text-align:center;padding:24px 0 6px}
 header h1{font-size:26px;font-weight:600;letter-spacing:-0.3px}
 header p{color:var(--sub);font-size:13px;margin-top:2px}
 
-/* stats bar */
-.stats{
-  display:flex;justify-content:center;gap:20px;
-  padding:10px 0;font-size:14px;color:var(--sub);
-}
+/* tabs */
+.tabs{display:flex;gap:0;margin:10px 0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.tab{flex:1;padding:12px;border:none;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;background:var(--card);color:var(--sub)}
+.tab:hover{background:#f0f0f5}
+.tab.active{background:var(--blue);color:#fff}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* stats */
+.stats{display:flex;justify-content:center;gap:20px;padding:8px 0;font-size:14px;color:var(--sub)}
 .stats span{display:flex;align-items:center;gap:4px}
 .stats strong{color:var(--text);font-weight:600}
 
 /* table */
-.table-wrap{
-  overflow-x:auto;margin:8px 0 16px;
-  background:var(--card);border-radius:var(--radius);
-  box-shadow:var(--shadow);padding:14px 10px;
-}
-.table-grid{
-  display:grid;
-  grid-template-columns:32px repeat(2,52px) 18px repeat(6,52px);
-  gap:3px;justify-content:center;
-}
-.table-grid .group-label{
-  font-size:10px;font-weight:600;text-align:center;
-  padding:3px 0;color:var(--sub);
-}
-.table-grid .period-label{
-  font-size:9px;text-align:center;color:var(--sub);align-self:center;
-}
-.table-grid .cell{
-  width:52px;height:40px;border-radius:6px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:500;cursor:default;transition:all .15s;
-  background:#f0f0f0;color:var(--sub);
-}
-.table-grid .cell.active{
-  transform:scale(1.08);box-shadow:0 0 0 3px var(--blue);
-  font-weight:700;color:#fff;
-}
-.table-grid .cell.done-correct{
-  opacity:0.5;background:var(--green);color:#fff;
-}
-.table-grid .cell.done-wrong{
-  opacity:0.5;background:var(--red);color:#fff;
-}
+.table-wrap{overflow-x:auto;margin:6px 0 14px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 10px}
+.table-grid{display:grid;grid-template-columns:32px repeat(2,52px) 18px repeat(6,52px);gap:3px;justify-content:center}
+.table-grid .group-label{font-size:10px;font-weight:600;text-align:center;padding:3px 0;color:var(--sub)}
+.table-grid .period-label{font-size:9px;text-align:center;color:var(--sub);align-self:center}
+.table-grid .cell{width:52px;height:40px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;cursor:default;transition:all .15s;background:#f0f0f0;color:var(--sub)}
+.table-grid .cell.active{transform:scale(1.08);box-shadow:0 0 0 3px var(--blue);font-weight:700;color:#fff}
+.table-grid .cell.done-correct{opacity:0.5;background:var(--green);color:#fff}
+.table-grid .cell.done-wrong{opacity:0.5;background:var(--red);color:#fff}
 .table-grid .cell.empty{background:transparent}
 .table-grid .cell.g1{background:#ffe0e0;color:#c0392b}
 .table-grid .cell.g2{background:#fff3cd;color:#856404}
@@ -84,51 +46,27 @@ header p{color:var(--sub);font-size:13px;margin-top:2px}
 .table-grid .cell.g17{background:#d1f2eb;color:#0e6251}
 .table-grid .cell.g18{background:#eaecee;color:#566573}
 
-/* quiz card */
-.quiz-card{
-  background:var(--card);border-radius:var(--radius);
-  box-shadow:var(--shadow);padding:28px 32px;margin-top:8px;
-}
+/* fill card */
+.quiz-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 32px;margin-top:8px}
 .quiz-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-.quiz-head .badge{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:4px 14px;border-radius:20px;
-  font-size:13px;font-weight:600;color:#fff;
-}
+.quiz-head .badge{display:inline-flex;align-items:center;gap:5px;padding:4px 14px;border-radius:20px;font-size:13px;font-weight:600;color:#fff}
 .quiz-head .period-tag{font-size:13px;color:var(--sub)}
 .quiz-progress{font-size:13px;color:var(--sub);margin-left:auto}
 
 .input-group{margin-bottom:14px;position:relative}
 .input-group label{display:block;font-size:13px;font-weight:500;margin-bottom:4px;color:var(--sub)}
 .input-group .input-wrap{position:relative;display:flex;align-items:center}
-.input-group input{
-  width:100%;padding:10px 14px;border:2px solid var(--border);
-  border-radius:10px;font-size:15px;font-family:inherit;
-  outline:none;transition:border-color .2s;background:#fafafa;
-}
+.input-group input{width:100%;padding:10px 14px;border:2px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;outline:none;transition:border-color .2s;background:#fafafa}
 .input-group input:focus{border-color:var(--blue)}
-.input-group .icon{
-  position:absolute;right:12px;font-size:18px;font-weight:600;
-  display:none;
-}
+.input-group .icon{position:absolute;right:12px;font-size:18px;font-weight:600;display:none}
 .input-group .icon.show{display:block}
 .input-group .icon.correct{color:var(--green)}
 .input-group .icon.wrong{color:var(--red)}
 .input-group input.correct{border-color:var(--green);background:#f0fff4}
 .input-group input.wrong{border-color:var(--red);background:#fff5f5}
-.input-group .ref-thai{
-  margin-top:4px;font-size:12px;color:var(--sub);
-}
-.ref-thai strong{color:var(--text)}
 
-/* buttons */
 .btn-group{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
-.btn{
-  flex:1;min-width:100px;padding:11px 18px;border:none;
-  border-radius:10px;font-size:14px;font-weight:600;
-  font-family:inherit;cursor:pointer;transition:all .15s;
-  text-align:center;
-}
+.btn{flex:1;min-width:100px;padding:11px 18px;border:none;border-radius:10px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;text-align:center}
 .btn:disabled{opacity:0.4;cursor:default}
 .btn-check{background:var(--blue);color:#fff}
 .btn-check:hover:not(:disabled){background:var(--blue-hover)}
@@ -137,11 +75,24 @@ header p{color:var(--sub);font-size:13px;margin-top:2px}
 .btn-next{background:var(--green);color:#fff}
 .btn-next:hover:not(:disabled){background:#2db84e}
 
+/* choice card */
+.choice-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:28px 32px;margin-top:8px;text-align:center}
+.choice-symbol{font-size:60px;font-weight:700;margin:10px 0 6px;letter-spacing:-2px}
+.choice-hint{font-size:14px;color:var(--sub);margin-bottom:20px}
+.choice-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:500px;margin:0 auto}
+.choice-btn{padding:14px 10px;border:2px solid var(--border);border-radius:12px;font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;transition:all .12s;background:var(--card)}
+.choice-btn:hover:not(:disabled){border-color:var(--blue);background:#f0f5ff;transform:translateY(-1px)}
+.choice-btn.correct{background:var(--green);color:#fff;border-color:var(--green)}
+.choice-btn.wrong{background:var(--red);color:#fff;border-color:var(--red)}
+.choice-btn.reveal{background:var(--green);color:#fff;border-color:var(--green);opacity:0.7}
+.choice-btn:disabled{cursor:default;opacity:0.8}
+.choice-btn:disabled.correct{opacity:1}
+.choice-feedback{font-size:16px;font-weight:600;margin:16px 0 0;min-height:30px}
+.choice-next{margin-top:16px;padding:10px 40px;background:var(--green);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;display:none}
+.choice-next:hover{background:#2db84e}
+
 /* summary */
-.summary{
-  display:none;background:var(--card);border-radius:var(--radius);
-  box-shadow:var(--shadow);padding:40px;text-align:center;margin-top:16px;
-}
+.summary{display:none;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:40px;text-align:center;margin-top:16px}
 .summary.show{display:block}
 .summary h2{font-size:22px;margin-bottom:6px}
 .summary .score-big{font-size:52px;font-weight:700;margin:8px 0}
@@ -149,15 +100,16 @@ header p{color:var(--sub);font-size:13px;margin-top:2px}
 .summary .score-big.ok{color:#f59e0b}
 .summary .score-big.bad{color:var(--red)}
 .summary .detail{margin-top:4px;font-size:14px;color:var(--sub)}
-.summary .btn-restart{margin-top:20px;padding:12px 36px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s}
-.summary .btn-restart:hover{background:var(--blue-hover)}
+.summary .btn-restart{margin-top:20px;padding:12px 36px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer}
 
-/* responsive */
 @media(max-width:600px){
   .table-grid{grid-template-columns:24px repeat(2,40px) 10px repeat(6,40px);gap:2px}
   .table-grid .cell{width:40px;height:32px;font-size:11px}
-  .quiz-card{padding:20px 16px}
+  .quiz-card,.choice-card{padding:20px 16px}
   .btn{min-width:80px;padding:10px 12px;font-size:13px}
+  .choice-symbol{font-size:48px}
+  .choice-options{grid-template-columns:1fr 1fr;gap:8px}
+  .choice-btn{font-size:14px;padding:12px 8px}
 }
 </style>
 </head>
@@ -165,36 +117,36 @@ header p{color:var(--sub);font-size:13px;margin-top:2px}
 <div class="container">
 <header>
   <h1>ตารางธาตุหมู่ A</h1>
-  <p>ทบทวนหมู่ IA – VIIIA · สัญลักษณ์ · ชื่อไทย</p>
+  <p>เกมท่องจำหมู่ IA – VIIIA</p>
 </header>
 
-<div class="stats" id="stats">
-  <span>✓ ถูก <strong id="correctCount">0</strong></span>
-  <span>✗ ผิด <strong id="wrongCount">0</strong></span>
-  <span>ข้อ <strong id="currentNum">1</strong> / <strong id="totalNum">0</strong></span>
+<div class="tabs" id="tabs">
+  <button class="tab active" data-tab="fill">✏️ เกมพิมพ์</button>
+  <button class="tab" data-tab="choice">🎯 เกมเลือก</button>
 </div>
 
-<!-- mini table -->
-<div class="table-wrap" id="tableWrap">
-  <div class="table-grid" id="tableGrid"></div>
+<!-- ════ FILL TAB ════ -->
+<div class="tab-content active" id="tabFill">
+<div class="stats" id="statsFill">
+  <span>✓ ถูก <strong id="fCorrect">0</strong></span>
+  <span>✗ ผิด <strong id="fWrong">0</strong></span>
+  <span>ข้อ <strong id="fCur">1</strong> / <strong id="fTotal">0</strong></span>
 </div>
+<div class="table-wrap"><div class="table-grid" id="tableGridFill"></div></div>
 
-<!-- quiz -->
 <div class="quiz-card" id="quizCard">
   <div class="quiz-head">
-    <span class="badge" id="groupBadge">หมู่ IA</span>
-    <span class="period-tag" id="periodTag">คาบ 1</span>
-    <span class="quiz-progress" id="progressText">ข้อ 1/44</span>
+    <span class="badge" id="fBadge">หมู่ IA</span>
+    <span class="period-tag" id="fPeriod">คาบ 1</span>
+    <span class="quiz-progress" id="fProg">ข้อ 1/44</span>
   </div>
-
   <div class="input-group">
     <label>สัญลักษณ์ธาตุ</label>
     <div class="input-wrap">
-      <input type="text" id="inpSymbol" placeholder="เช่น H" autocomplete="off" spellcheck="false">
-      <span class="icon" id="icoSymbol"></span>
+      <input type="text" id="inpSym" placeholder="เช่น H" autocomplete="off" spellcheck="false">
+      <span class="icon" id="icoSym"></span>
     </div>
   </div>
-
   <div class="input-group" id="thaiGroup">
     <label>ชื่อไทย (ทับศัพท์)</label>
     <div class="input-wrap">
@@ -202,7 +154,6 @@ header p{color:var(--sub);font-size:13px;margin-top:2px}
       <span class="icon" id="icoThai"></span>
     </div>
   </div>
-
   <div class="input-group" id="tradGroup" style="display:none">
     <label>ชื่อไทยเฉพาะ</label>
     <div class="input-wrap">
@@ -210,141 +161,138 @@ header p{color:var(--sub);font-size:13px;margin-top:2px}
       <span class="icon" id="icoTrad"></span>
     </div>
   </div>
-
   <div class="btn-group">
     <button class="btn btn-check" id="btnCheck" onclick="checkAnswer()">ตรวจ</button>
-    <button class="btn btn-answer" id="btnAnswer" onclick="showAnswer()">เฉลย</button>
+    <button class="btn btn-answer" id="btnAns" onclick="showAnswer()">เฉลย</button>
     <button class="btn btn-next" id="btnNext" onclick="nextQuestion()" disabled>ถัดไป →</button>
   </div>
 </div>
 
-<!-- summary -->
-<div class="summary" id="summary">
+<div class="summary" id="summaryFill">
   <h2>🎉 ทำครบทุกข้อแล้ว!</h2>
-  <div class="score-big good" id="finalScore">0/0</div>
-  <div class="detail" id="finalDetail"></div>
-  <button class="btn-restart" onclick="restart()">เริ่มใหม่</button>
+  <div class="score-big good" id="fScore">0/0</div>
+  <div class="detail" id="fDetail"></div>
+  <button class="btn-restart" onclick="restartFill()">เริ่มใหม่</button>
+</div>
+</div>
+
+<!-- ════ CHOICE TAB ════ -->
+<div class="tab-content" id="tabChoice">
+<div class="stats" id="statsChoice">
+  <span>✓ ถูก <strong id="cCorrect">0</strong></span>
+  <span>✗ ผิด <strong id="cWrong">0</strong></span>
+  <span>ข้อ <strong id="cCur">1</strong> / <strong id="cTotal">0</strong></span>
+</div>
+<div class="table-wrap"><div class="table-grid" id="tableGridChoice"></div></div>
+
+<div class="choice-card" id="choiceCard">
+  <div class="choice-symbol" id="cSym">H</div>
+  <div class="choice-hint" id="cHint">หมู่ IA คาบ 1</div>
+  <div class="choice-options" id="cOpts"></div>
+  <div class="choice-feedback" id="cFb"></div>
+  <button class="choice-next" id="cNext" onclick="nextChoice()">ถัดไป →</button>
+</div>
+
+<div class="summary" id="summaryChoice">
+  <h2>🎉 ทำครบทุกข้อแล้ว!</h2>
+  <div class="score-big good" id="cScore">0/0</div>
+  <div class="detail" id="cDetail"></div>
+  <button class="btn-restart" onclick="restartChoice()">เริ่มใหม่</button>
+</div>
 </div>
 </div>
 
 <script>
 // ─── DATA ───
 const G = [
-  { n:1, l:'IA',  cl:'g1', els:[
-    {sym:'H', en:'Hydrogen',   th:'ไฮโดรเจน',   p:1},
-    {sym:'Li',en:'Lithium',    th:'ลิเทียม',     p:2},
-    {sym:'Na',en:'Sodium',     th:'โซเดียม',     p:3},
-    {sym:'K', en:'Potassium',  th:'โพแทสเซียม',  p:4},
-    {sym:'Rb',en:'Rubidium',   th:'รูบิเดียม',   p:5},
-    {sym:'Cs',en:'Caesium',    th:'ซีเซียม',     p:6},
-    {sym:'Fr',en:'Francium',   th:'แฟรนเซียม',   p:7},
-  ]},
-  { n:2, l:'IIA', cl:'g2', els:[
-    {sym:'Be',en:'Beryllium',  th:'เบริลเลียม',  p:2},
-    {sym:'Mg',en:'Magnesium',  th:'แมกนีเซียม',  p:3},
-    {sym:'Ca',en:'Calcium',    th:'แคลเซียม',    p:4},
-    {sym:'Sr',en:'Strontium',  th:'สตรอนเชียม',  p:5},
-    {sym:'Ba',en:'Barium',     th:'แบเรียม',     p:6},
-    {sym:'Ra',en:'Radium',     th:'เรเดียม',     p:7},
-  ]},
-  { n:13,l:'IIIA',cl:'g13', els:[
-    {sym:'B', en:'Boron',      th:'โบรอน',       p:2},
-    {sym:'Al',en:'Aluminium',  th:'อะลูมิเนียม',  p:3},
-    {sym:'Ga',en:'Gallium',    th:'แกลเลียม',    p:4},
-    {sym:'In',en:'Indium',     th:'อินเดียม',     p:5},
-    {sym:'Tl',en:'Thallium',   th:'แทลเลียม',    p:6},
-  ]},
-  { n:14,l:'IVA', cl:'g14', els:[
-    {sym:'C', en:'Carbon',     th:'คาร์บอน',     p:2},
-    {sym:'Si',en:'Silicon',    th:'ซิลิคอน',     p:3},
-    {sym:'Ge',en:'Germanium',  th:'เจอร์เมเนียม', p:4},
-    {sym:'Sn',en:'Tin',        th:'ทิน',         p:5, thSp:'ดีบุก'},
-    {sym:'Pb',en:'Lead',       th:'เลด',         p:6, thSp:'ตะกั่ว'},
-  ]},
-  { n:15,l:'VA',  cl:'g15', els:[
-    {sym:'N', en:'Nitrogen',   th:'ไนโตรเจน',    p:2},
-    {sym:'P', en:'Phosphorus', th:'ฟอสฟอรัส',    p:3},
-    {sym:'As',en:'Arsenic',    th:'สารหนู',      p:4},
-    {sym:'Sb',en:'Antimony',   th:'แอนติโมนี',   p:5, thSp:'พลวง'},
-    {sym:'Bi',en:'Bismuth',    th:'บิสมัท',      p:6},
-  ]},
-  { n:16,l:'VIA', cl:'g16', els:[
-    {sym:'O', en:'Oxygen',     th:'ออกซิเจน',    p:2},
-    {sym:'S', en:'Sulfur',     th:'ซัลเฟอร์',    p:3, thSp:'กำมะถัน'},
-    {sym:'Se',en:'Selenium',   th:'ซีลีเนียม',    p:4},
-    {sym:'Te',en:'Tellurium',  th:'เทลลูเรียม',   p:5},
-    {sym:'Po',en:'Polonium',   th:'พอโลเนียม',   p:6},
-  ]},
-  { n:17,l:'VIIA',cl:'g17', els:[
-    {sym:'F', en:'Fluorine',   th:'ฟลูออรีน',    p:2},
-    {sym:'Cl',en:'Chlorine',   th:'คลอรีน',      p:3},
-    {sym:'Br',en:'Bromine',    th:'โบรมีน',      p:4},
-    {sym:'I', en:'Iodine',     th:'ไอโอดีน',     p:5},
-    {sym:'At',en:'Astatine',   th:'แอสทาทีน',    p:6},
-  ]},
-  { n:18,l:'VIIIA',cl:'g18', els:[
-    {sym:'He',en:'Helium',     th:'ฮีเลียม',     p:1},
-    {sym:'Ne',en:'Neon',       th:'นีออน',       p:2},
-    {sym:'Ar',en:'Argon',      th:'อาร์กอน',     p:3},
-    {sym:'Kr',en:'Krypton',    th:'คริปทอน',    p:4},
-    {sym:'Xe',en:'Xenon',      th:'ซีนอน',      p:5},
-    {sym:'Rn',en:'Radon',      th:'เรดอน',       p:6},
-  ]},
+  {n:1,l:'IA',cl:'g1',els:[
+    {sym:'H',en:'Hydrogen',th:'ไฮโดรเจน',p:1},
+    {sym:'Li',en:'Lithium',th:'ลิเทียม',p:2},
+    {sym:'Na',en:'Sodium',th:'โซเดียม',p:3},
+    {sym:'K',en:'Potassium',th:'โพแทสเซียม',p:4},
+    {sym:'Rb',en:'Rubidium',th:'รูบิเดียม',p:5},
+    {sym:'Cs',en:'Caesium',th:'ซีเซียม',p:6},
+    {sym:'Fr',en:'Francium',th:'แฟรนเซียม',p:7}]},
+  {n:2,l:'IIA',cl:'g2',els:[
+    {sym:'Be',en:'Beryllium',th:'เบริลเลียม',p:2},
+    {sym:'Mg',en:'Magnesium',th:'แมกนีเซียม',p:3},
+    {sym:'Ca',en:'Calcium',th:'แคลเซียม',p:4},
+    {sym:'Sr',en:'Strontium',th:'สตรอนเชียม',p:5},
+    {sym:'Ba',en:'Barium',th:'แบเรียม',p:6},
+    {sym:'Ra',en:'Radium',th:'เรเดียม',p:7}]},
+  {n:13,l:'IIIA',cl:'g13',els:[
+    {sym:'B',en:'Boron',th:'โบรอน',p:2},
+    {sym:'Al',en:'Aluminium',th:'อะลูมิเนียม',p:3},
+    {sym:'Ga',en:'Gallium',th:'แกลเลียม',p:4},
+    {sym:'In',en:'Indium',th:'อินเดียม',p:5},
+    {sym:'Tl',en:'Thallium',th:'แทลเลียม',p:6}]},
+  {n:14,l:'IVA',cl:'g14',els:[
+    {sym:'C',en:'Carbon',th:'คาร์บอน',p:2},
+    {sym:'Si',en:'Silicon',th:'ซิลิคอน',p:3},
+    {sym:'Ge',en:'Germanium',th:'เจอร์เมเนียม',p:4},
+    {sym:'Sn',en:'Tin',th:'ทิน',p:5,thSp:'ดีบุก'},
+    {sym:'Pb',en:'Lead',th:'เลด',p:6,thSp:'ตะกั่ว'}]},
+  {n:15,l:'VA',cl:'g15',els:[
+    {sym:'N',en:'Nitrogen',th:'ไนโตรเจน',p:2},
+    {sym:'P',en:'Phosphorus',th:'ฟอสฟอรัส',p:3},
+    {sym:'As',en:'Arsenic',th:'สารหนู',p:4},
+    {sym:'Sb',en:'Antimony',th:'แอนติโมนี',p:5,thSp:'พลวง'},
+    {sym:'Bi',en:'Bismuth',th:'บิสมัท',p:6}]},
+  {n:16,l:'VIA',cl:'g16',els:[
+    {sym:'O',en:'Oxygen',th:'ออกซิเจน',p:2},
+    {sym:'S',en:'Sulfur',th:'ซัลเฟอร์',p:3,thSp:'กำมะถัน'},
+    {sym:'Se',en:'Selenium',th:'ซีลีเนียม',p:4},
+    {sym:'Te',en:'Tellurium',th:'เทลลูเรียม',p:5},
+    {sym:'Po',en:'Polonium',th:'พอโลเนียม',p:6}]},
+  {n:17,l:'VIIA',cl:'g17',els:[
+    {sym:'F',en:'Fluorine',th:'ฟลูออรีน',p:2},
+    {sym:'Cl',en:'Chlorine',th:'คลอรีน',p:3},
+    {sym:'Br',en:'Bromine',th:'โบรมีน',p:4},
+    {sym:'I',en:'Iodine',th:'ไอโอดีน',p:5},
+    {sym:'At',en:'Astatine',th:'แอสทาทีน',p:6}]},
+  {n:18,l:'VIIIA',cl:'g18',els:[
+    {sym:'He',en:'Helium',th:'ฮีเลียม',p:1},
+    {sym:'Ne',en:'Neon',th:'นีออน',p:2},
+    {sym:'Ar',en:'Argon',th:'อาร์กอน',p:3},
+    {sym:'Kr',en:'Krypton',th:'คริปทอน',p:4},
+    {sym:'Xe',en:'Xenon',th:'ซีนอน',p:5},
+    {sym:'Rn',en:'Radon',th:'เรดอน',p:6}]},
 ];
+const HAS_TRAD = new Set(['S','Sn','Pb','Sb']);
 
-// elements that have a traditional Thai name (4th field)
-const HAS_TRAD_THAI = new Set(['S','Sn','Pb','Sb']);
-
-// flat list + index map for table building
 const elIdx = new Map();
 const all = [];
-G.forEach(g => {
-  g.els.forEach(e => {
-    elIdx.set(e, all.length);
-    all.push({ ...e, group:g.n, groupLabel:g.l, groupCls:g.cl });
-  });
+G.forEach(g => { g.els.forEach(e => { elIdx.set(e, all.length); all.push({...e, group:g.n, groupLabel:g.l, groupCls:g.cl }); }); });
+
+const colors = {1:'#ff6b6b',2:'#ffd93d',13:'#6bcb77',14:'#4d96ff',15:'#9b59b6',16:'#e67e22',17:'#1abc9c',18:'#95a5a6'};
+
+// helper: thai name for an element (traditional if available)
+function thName(e){ return e.thSp||e.th; }
+
+// ─── TAB SWITCHING ───
+document.getElementById('tabs').addEventListener('click', function(e){
+  const btn = e.target.closest('.tab');
+  if(!btn) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab' + btn.dataset.tab.charAt(0).toUpperCase() + btn.dataset.tab.slice(1)).classList.add('active');
 });
 
-// ─── STATE ───
-let idx = 0;
-let done = [];   // state per element: null | 'correct' | 'wrong'
-let checked = false;
-
-const $ = id => document.getElementById(id);
-const inpSym = $('inpSymbol'), inpThai = $('inpThai'), inpTrad = $('inpTrad');
-const icoSym = $('icoSymbol'), icoThai = $('icoThai'), icoTrad = $('icoTrad');
-const grpBadge = $('groupBadge'), perTag = $('periodTag'), progText = $('progressText');
-const btnCheck = $('btnCheck'), btnAns = $('btnAnswer'), btnNext = $('btnNext');
-const thaiGrp = $('thaiGroup'), tradGrp = $('tradGroup');
-const correctSpan = $('correctCount'), wrongSpan = $('wrongCount');
-const currNum = $('currentNum'), totalNum = $('totalNum');
-
-function init(){
-  totalNum.textContent = all.length;
-  buildTable();
-  showQuestion(0);
-}
-
-// ─── TABLE ───
-function buildTable(){
-  const grid = $('tableGrid');
+// ─── BUILD TABLE (reused) ───
+function buildTable(gridId, prefix){
+  const grid = document.getElementById(gridId);
   const periods = [1,2,3,4,5,6,7];
-  // header row
-  let html = '<div class="period-label"></div>';
-  html += '<div class="group-label">IA</div><div class="group-label">IIA</div><div class="group-label"></div>';
-  html += '<div class="group-label">IIIA</div><div class="group-label">IVA</div><div class="group-label">VA</div>';
-  html += '<div class="group-label">VIA</div><div class="group-label">VIIA</div><div class="group-label">VIIIA</div>';
-  // data rows
+  let html = '<div class="period-label"></div><div class="group-label">IA</div><div class="group-label">IIA</div><div class="group-label"></div><div class="group-label">IIIA</div><div class="group-label">IVA</div><div class="group-label">VA</div><div class="group-label">VIA</div><div class="group-label">VIIA</div><div class="group-label">VIIIA</div>';
   periods.forEach(p => {
     html += `<div class="period-label">${p}</div>`;
     for(let gi=0; gi<G.length; gi++){
       const g = G[gi];
-      // spacer col after group 2
       if(gi===2) html += '<div class="cell empty"></div>';
-      const el = g.els.find(e => e.p === p);
-      if(el){
+      const el = g.els.find(e2 => e2.p === p);
+      if(el) {
         const ei = elIdx.get(el);
-        html += `<div class="cell ${g.cl}" data-idx="${ei}" id="cell-${ei}">${el.sym}</div>`;
+        html += `<div class="cell ${g.cl}" id="${prefix}cell-${ei}">${el.sym}</div>`;
       } else {
         html += '<div class="cell empty"></div>';
       }
@@ -352,189 +300,203 @@ function buildTable(){
   });
   grid.innerHTML = html;
 }
+buildTable('tableGridFill','f');
+buildTable('tableGridChoice','c');
 
-// ─── QUESTION ───
-function showQuestion(n){
-  idx = n;
-  checked = false;
-  const e = all[idx];
-  // badge
-  grpBadge.textContent = `หมู่ ${e.group} (${e.groupLabel})`;
-  const colors = {1:'#ff6b6b',2:'#ffd93d',13:'#6bcb77',14:'#4d96ff',15:'#9b59b6',16:'#e67e22',17:'#1abc9c',18:'#95a5a6'};
-  grpBadge.style.background = colors[e.group] || '#888';
-  perTag.textContent = `คาบ ${e.p}`;
-  progText.textContent = `ข้อ ${idx+1}/${all.length}`;
+// ─── FILL GAME ───
+let fIdx = 0, fDone = [], fChecked = false;
+const inpSym = $('inpSym'), inpThai = $('inpThai'), inpTrad = $('inpTrad');
+const icoSym = $('icoSym'), icoThai = $('icoThai'), icoTrad = $('icoTrad');
+function $(id){return document.getElementById(id)}
 
-  // thai fields
-  thaiGrp.style.display = 'block';
+function showFill(n){
+  fIdx = n; fChecked = false;
+  const e = all[fIdx];
+  $('fBadge').textContent = `หมู่ ${e.group} (${e.groupLabel})`;
+  $('fBadge').style.background = colors[e.group]||'#888';
+  $('fPeriod').textContent = `คาบ ${e.p}`;
+  $('fProg').textContent = `ข้อ ${fIdx+1}/${all.length}`;
+  $('thaiGroup').style.display = 'block';
   inpThai.placeholder = 'เช่น ' + e.th;
-  if( HAS_TRAD_THAI.has(e.sym) ){
-    tradGrp.style.display = 'block';
-    inpTrad.placeholder = 'เช่น ' + (e.thSp||'');
-  } else {
-    tradGrp.style.display = 'none';
-  }
-
-  // clear inputs
+  if(HAS_TRAD.has(e.sym)){ $('tradGroup').style.display = 'block'; inpTrad.placeholder = 'เช่น '+(e.thSp||''); }
+  else { $('tradGroup').style.display = 'none'; }
   inpSym.value = ''; inpThai.value = ''; inpTrad.value = '';
   [inpSym,inpThai,inpTrad].forEach(el => { if(el) el.className=''; });
-  [icoSym,icoThai,icoTrad].forEach(el => { el.className='icon'; });
-
-  // buttons
-  btnCheck.disabled = false;
-  btnAns.disabled = false;
-  btnNext.disabled = true;
-  btnCheck.textContent = 'ตรวจ';
-
-  // stats
-  updateStats();
-
-  // highlight table cell
-  document.querySelectorAll('.cell').forEach(c => c.classList.remove('active'));
-  const activeCell = $('cell-'+idx);
-  if(activeCell) activeCell.classList.add('active');
-
-  // focus first input
+  [icoSym,icoThai,icoTrad].forEach(el => el.className='icon');
+  $('btnCheck').disabled = false; $('btnAns').disabled = false; $('btnNext').disabled = true;
+  $('btnCheck').textContent = 'ตรวจ';
+  $('quizCard').style.display = 'block'; $('summaryFill').classList.remove('show');
+  updateFillStats();
+  document.querySelectorAll('#tabFill .cell').forEach(c => c.classList.remove('active'));
+  const ac = $('fcell-'+fIdx); if(ac) ac.classList.add('active');
   setTimeout(() => inpSym.focus(), 100);
 }
-
-function updateStats(){
-  const corr = done.filter(s => s==='correct').length;
-  const wrg = done.filter(s => s==='wrong').length;
-  correctSpan.textContent = corr;
-  wrongSpan.textContent = wrg;
-  currNum.textContent = idx+1;
-
-  // update table cells
+function updateFillStats(){
+  const corr = fDone.filter(s => s==='correct').length;
+  const wrg = fDone.filter(s => s==='wrong').length;
+  $('fCorrect').textContent = corr; $('fWrong').textContent = wrg; $('fCur').textContent = fIdx+1; $('fTotal').textContent = all.length;
   all.forEach((_,i) => {
-    const cell = $('cell-'+i);
-    if(!cell) return;
+    const cell = $('fcell-'+i); if(!cell) return;
     cell.classList.remove('done-correct','done-wrong');
-    if(done[i]==='correct') cell.classList.add('done-correct');
-    else if(done[i]==='wrong') cell.classList.add('done-wrong');
+    if(fDone[i]==='correct') cell.classList.add('done-correct');
+    else if(fDone[i]==='wrong') cell.classList.add('done-wrong');
   });
 }
-
-// ─── CHECK ───
 function checkAnswer(){
-  if(checked) return;
-  const e = all[idx];
-  const s = inpSym.value.trim();
-  const t = inpThai.value.trim();
-
+  if(fChecked) return;
+  const e = all[fIdx];
+  const s = inpSym.value.trim(), t = inpThai.value.trim();
   const okSym = s.toLowerCase() === e.sym.toLowerCase();
   const okThai = t.toLowerCase() === e.th.toLowerCase();
-  const hasTrad = HAS_TRAD_THAI.has(e.sym);
-  const trad = inpTrad.value.trim();
-  const okTrad = hasTrad ? (trad.toLowerCase() === (e.thSp||'').toLowerCase()) : true;
-
-  setField(inpSym, icoSym, okSym);
-  setField(inpThai, icoThai, okThai);
-  if(hasTrad) setField(inpTrad, icoTrad, okTrad);
-
+  const hasT = HAS_TRAD.has(e.sym);
+  const tr = inpTrad.value.trim();
+  const okTrad = hasT ? tr.toLowerCase() === (e.thSp||'').toLowerCase() : true;
+  setField(inpSym, icoSym, okSym); setField(inpThai, icoThai, okThai);
+  if(hasT) setField(inpTrad, icoTrad, okTrad);
   const allOk = okSym && okThai && okTrad;
-  done[idx] = allOk ? 'correct' : 'wrong';
-  updateStats();
-
-  checked = true;
-  btnCheck.disabled = true;
-  btnAns.disabled = true;
-  btnNext.disabled = false;
-
-  // update table cell
-  const cell = $('cell-'+idx);
-  if(cell){
-    cell.classList.remove('active');
-    cell.classList.add(allOk ? 'done-correct' : 'done-wrong');
-  }
-
-  // if last question, change button
-  if(idx === all.length-1){
-    btnNext.textContent = 'ดูผลลัพธ์';
-    btnNext.onclick = showSummary;
-  }
+  fDone[fIdx] = allOk ? 'correct' : 'wrong';
+  fChecked = true; $('btnCheck').disabled = true; $('btnAns').disabled = true; $('btnNext').disabled = false;
+  updateFillStats();
+  const cell = $('fcell-'+fIdx);
+  if(cell){ cell.classList.remove('active'); cell.classList.add(allOk?'done-correct':'done-wrong'); }
+  if(fIdx === all.length-1){ $('btnNext').textContent = 'ดูผลลัพธ์'; $('btnNext').onclick = showFillSummary; }
 }
-
-function setField(inp, ico, ok){
-  inp.className = ok ? 'correct' : 'wrong';
-  ico.className = 'icon show ' + (ok ? 'correct' : 'wrong');
-  ico.textContent = ok ? '✓' : '✗';
-}
-
-// ─── SHOW ANSWER ───
+function setField(inp, ico, ok){ inp.className = ok?'correct':'wrong'; ico.className='icon show '+(ok?'correct':'wrong'); ico.textContent=ok?'✓':'✗'; }
 function showAnswer(){
-  const e = all[idx];
-  inpSym.value = e.sym;
-  setField(inpSym, icoSym, true);
-  inpThai.value = e.th;
-  setField(inpThai, icoThai, true);
-  if( HAS_TRAD_THAI.has(e.sym) && e.thSp){
-    inpTrad.value = e.thSp;
-    setField(inpTrad, icoTrad, true);
-  }
-  checked = true;
-  done[idx] = 'wrong';
-  btnCheck.disabled = true;
-  btnAns.disabled = true;
-  btnNext.disabled = false;
-  updateStats();
-  const cell = $('cell-'+idx);
-  if(cell){
-    cell.classList.remove('active');
-    cell.classList.add('done-wrong');
-  }
-  if(idx === all.length-1){
-    btnNext.textContent = 'ดูผลลัพธ์';
-    btnNext.onclick = showSummary;
-  }
+  const e = all[fIdx];
+  inpSym.value = e.sym; setField(inpSym, icoSym, true);
+  inpThai.value = e.th; setField(inpThai, icoThai, true);
+  if(HAS_TRAD.has(e.sym) && e.thSp){ inpTrad.value = e.thSp; setField(inpTrad, icoTrad, true); }
+  fChecked = true; fDone[fIdx] = 'wrong'; $('btnCheck').disabled = true; $('btnAns').disabled = true; $('btnNext').disabled = false;
+  updateFillStats();
+  const cell = $('fcell-'+fIdx); if(cell){ cell.classList.remove('active'); cell.classList.add('done-wrong'); }
+  if(fIdx === all.length-1){ $('btnNext').textContent = 'ดูผลลัพธ์'; $('btnNext').onclick = showFillSummary; }
 }
-
-// ─── NEXT ───
 function nextQuestion(){
-  if(idx < all.length-1){
-    showQuestion(idx+1);
-    btnNext.onclick = nextQuestion;
-    btnNext.textContent = 'ถัดไป →';
-  } else {
-    showSummary();
-  }
+  if(fIdx < all.length-1){ showFill(fIdx+1); $('btnNext').onclick = nextQuestion; $('btnNext').textContent = 'ถัดไป →'; }
+  else showFillSummary();
 }
-
-// ─── SUMMARY ───
-function showSummary(){
+function showFillSummary(){
   $('quizCard').style.display = 'none';
-  $('tableWrap').style.display = 'none';
-  const s = $('summary');
-  s.classList.add('show');
-  const corr = done.filter(x => x==='correct').length;
-  const total = all.length;
-  const pct = Math.round(corr/total*100);
-  $('finalScore').textContent = `${corr}/${total}`;
-  $('finalScore').className = 'score-big ' + (pct>=80?'good':pct>=50?'ok':'bad');
-  $('finalDetail').textContent = `ถูก ${corr} ข้อ · ผิด ${total-corr} ข้อ · คิดเป็น ${pct}%`;
+  const s = $('summaryFill'); s.classList.add('show');
+  const corr = fDone.filter(x => x==='correct').length, total = all.length, pct = Math.round(corr/total*100);
+  $('fScore').textContent = `${corr}/${total}`;
+  $('fScore').className = 'score-big ' + (pct>=80?'good':pct>=50?'ok':'bad');
+  $('fDetail').textContent = `ถูก ${corr} ข้อ · ผิด ${total-corr} ข้อ · คิดเป็น ${pct}%`;
 }
-
-function restart(){
-  done = [];
-  idx = 0;
-  $('summary').classList.remove('show');
-  $('quizCard').style.display = 'block';
-  $('tableWrap').style.display = 'block';
-  showQuestion(0);
-  btnNext.onclick = nextQuestion;
-  btnNext.textContent = 'ถัดไป →';
+function restartFill(){
+  fDone = []; fIdx = 0; $('summaryFill').classList.remove('show'); $('quizCard').style.display = 'block';
+  showFill(0); $('btnNext').onclick = nextQuestion; $('btnNext').textContent = 'ถัดไป →';
 }
-
-// keyboard: Enter moves between inputs, then checks
 document.addEventListener('keydown', e => {
   if(e.key!=='Enter') return;
   if(e.target===inpSym){ inpThai.focus(); e.preventDefault(); return; }
-  if(e.target===inpThai && tradGrp.style.display!=='none'){ inpTrad.focus(); e.preventDefault(); return; }
-  if(!btnCheck.disabled){ checkAnswer(); e.preventDefault(); }
-  else if(!btnNext.disabled){ nextQuestion(); e.preventDefault(); }
+  if(e.target===inpThai && $('tradGroup').style.display!=='none'){ inpTrad.focus(); e.preventDefault(); return; }
+  if(!$('btnCheck').disabled){ checkAnswer(); e.preventDefault(); }
+  else if(!$('btnNext').disabled){ nextQuestion(); e.preventDefault(); }
 });
+showFill(0);
 
-init();
+// ─── CHOICE GAME ───
+let cIdx = 0, cDone = [], cAnswered = false;
+
+function showChoice(n){
+  cIdx = n; cAnswered = false;
+  const e = all[cIdx];
+  $('cSym').textContent = e.sym;
+  $('cHint').textContent = `หมู่ ${e.group} (${e.groupLabel}) · คาบ ${e.p}`;
+  $('cFb').textContent = '';
+  $('cNext').style.display = 'none';
+  $('summaryChoice').classList.remove('show');
+  $('choiceCard').style.display = 'block';
+  updateChoiceStats();
+
+  const correct = thName(e);
+  // pick 3 wrong answers from other elements
+  const pool = all.filter((_,i) => i !== cIdx).map(el => thName(el));
+  const wrongs = [];
+  const used = new Set([correct]);
+  while(wrongs.length < 3 && pool.length > 0){
+    const r = Math.floor(Math.random() * pool.length);
+    if(!used.has(pool[r])){ used.add(pool[r]); wrongs.push(pool[r]); }
+    pool.splice(r, 1);
+  }
+  const opts = [correct, ...wrongs];
+  // shuffle
+  for(let i=opts.length-1; i>0; i--){ const j=Math.floor(Math.random()*(i+1)); [opts[i],opts[j]]=[opts[j],opts[i]]; }
+
+  const cont = $('cOpts');
+  cont.innerHTML = '';
+  opts.forEach(o => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = o;
+    btn.dataset.val = o;
+    btn.onclick = () => pickChoice(btn, o, correct);
+    cont.appendChild(btn);
+  });
+
+  document.querySelectorAll('#tabChoice .cell').forEach(c => c.classList.remove('active'));
+  const ac = $('ccell-'+cIdx); if(ac) ac.classList.add('active');
+}
+
+function pickChoice(btn, val, correct){
+  if(cAnswered) return;
+  cAnswered = true;
+  const allBtns = document.querySelectorAll('#cOpts .choice-btn');
+  allBtns.forEach(b => b.disabled = true);
+  const ok = val === correct;
+  btn.classList.add(ok ? 'correct' : 'wrong');
+  // reveal correct answer if wrong
+  if(!ok){
+    allBtns.forEach(b => {
+      if(b.dataset.val === correct) b.classList.add('reveal');
+    });
+  }
+  cDone[cIdx] = ok ? 'correct' : 'wrong';
+  $('cFb').textContent = ok ? '✓ ถูกต้อง!' : `✗ คำตอบที่ถูกคือ "${correct}"`;
+  $('cFb').style.color = ok ? 'var(--green)' : 'var(--red)';
+  updateChoiceStats();
+
+  const cell = $('ccell-'+cIdx);
+  if(cell){ cell.classList.remove('active'); cell.classList.add(ok?'done-correct':'done-wrong'); }
+
+  $('cNext').style.display = 'inline-block';
+  if(cIdx === all.length-1) $('cNext').textContent = 'ดูผลลัพธ์';
+}
+
+function updateChoiceStats(){
+  const corr = cDone.filter(s => s==='correct').length;
+  const wrg = cDone.filter(s => s==='wrong').length;
+  $('cCorrect').textContent = corr; $('cWrong').textContent = wrg; $('cCur').textContent = cIdx+1; $('cTotal').textContent = all.length;
+  all.forEach((_,i) => {
+    const cell = $('ccell-'+i); if(!cell) return;
+    cell.classList.remove('done-correct','done-wrong');
+    if(cDone[i]==='correct') cell.classList.add('done-correct');
+    else if(cDone[i]==='wrong') cell.classList.add('done-wrong');
+  });
+}
+
+function nextChoice(){
+  if(cIdx < all.length-1){ showChoice(cIdx+1); $('cNext').textContent = 'ถัดไป →'; }
+  else showChoiceSummary();
+}
+
+function showChoiceSummary(){
+  $('choiceCard').style.display = 'none';
+  const s = $('summaryChoice'); s.classList.add('show');
+  const corr = cDone.filter(x => x==='correct').length, total = all.length, pct = Math.round(corr/total*100);
+  $('cScore').textContent = `${corr}/${total}`;
+  $('cScore').className = 'score-big ' + (pct>=80?'good':pct>=50?'ok':'bad');
+  $('cDetail').textContent = `ถูก ${corr} ข้อ · ผิด ${total-corr} ข้อ · คิดเป็น ${pct}%`;
+}
+
+function restartChoice(){
+  cDone = []; cIdx = 0; $('summaryChoice').classList.remove('show'); $('choiceCard').style.display = 'block';
+  showChoice(0); $('cNext').textContent = 'ถัดไป →';
+}
+
+showChoice(0);
 </script>
 </body>
 </html>
