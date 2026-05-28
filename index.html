@@ -204,12 +204,19 @@ header p{color:var(--sub);font-size:13px;margin-top:2px}
   </div>
 
   <div class="input-group" id="thaiGroup">
-    <label>ชื่อภาษาไทย</label>
+    <label>ชื่อไทย (ทับศัพท์)</label>
     <div class="input-wrap">
       <input type="text" id="inpThai" placeholder="เช่น ไฮโดรเจน" autocomplete="off" spellcheck="false">
       <span class="icon" id="icoThai"></span>
     </div>
-    <div class="ref-thai"></div>
+  </div>
+
+  <div class="input-group" id="tradGroup" style="display:none">
+    <label>ชื่อไทยเฉพาะ</label>
+    <div class="input-wrap">
+      <input type="text" id="inpTrad" placeholder="เช่น ดีบุก" autocomplete="off" spellcheck="false">
+      <span class="icon" id="icoTrad"></span>
+    </div>
   </div>
 
   <div class="btn-group">
@@ -259,19 +266,19 @@ const G = [
     {sym:'C', en:'Carbon',     th:'คาร์บอน',     p:2},
     {sym:'Si',en:'Silicon',    th:'ซิลิคอน',     p:3},
     {sym:'Ge',en:'Germanium',  th:'เจอร์เมเนียม', p:4},
-    {sym:'Sn',en:'Tin',        th:'ดีบุก',       p:5},
-    {sym:'Pb',en:'Lead',       th:'ตะกั่ว',      p:6},
+    {sym:'Sn',en:'Tin',        th:'ทิน',         p:5, thSp:'ดีบุก'},
+    {sym:'Pb',en:'Lead',       th:'เลด',         p:6, thSp:'ตะกั่ว'},
   ]},
   { n:15,l:'VA',  cl:'g15', els:[
     {sym:'N', en:'Nitrogen',   th:'ไนโตรเจน',    p:2},
     {sym:'P', en:'Phosphorus', th:'ฟอสฟอรัส',    p:3},
     {sym:'As',en:'Arsenic',    th:'สารหนู',      p:4},
-    {sym:'Sb',en:'Antimony',   th:'พลวง',        p:5},
+    {sym:'Sb',en:'Antimony',   th:'แอนติโมนี',   p:5, thSp:'พลวง'},
     {sym:'Bi',en:'Bismuth',    th:'บิสมัท',      p:6},
   ]},
   { n:16,l:'VIA', cl:'g16', els:[
     {sym:'O', en:'Oxygen',     th:'ออกซิเจน',    p:2},
-    {sym:'S', en:'Sulfur',     th:'กำมะถัน',     p:3},
+    {sym:'S', en:'Sulfur',     th:'ซัลเฟอร์',    p:3, thSp:'กำมะถัน'},
     {sym:'Se',en:'Selenium',   th:'ซีลีเนียม',    p:4},
     {sym:'Te',en:'Tellurium',  th:'เทลลูเรียม',   p:5},
     {sym:'Po',en:'Polonium',   th:'พอโลเนียม',   p:6},
@@ -293,8 +300,8 @@ const G = [
   ]},
 ];
 
-// elements that require Thai name input
-const NEEDS_THAI = new Set(['S','As','Sn','Sb','Pb']);
+// elements that have a traditional Thai name (4th field)
+const HAS_TRAD_THAI = new Set(['S','Sn','Pb','Sb']);
 
 // flat list + index map for table building
 const elIdx = new Map();
@@ -312,11 +319,11 @@ let done = [];   // state per element: null | 'correct' | 'wrong'
 let checked = false;
 
 const $ = id => document.getElementById(id);
-const inpSym = $('inpSymbol'), inpName = $('inpName'), inpThai = $('inpThai');
-const icoSym = $('icoSymbol'), icoName = $('icoName'), icoThai = $('icoThai');
+const inpSym = $('inpSymbol'), inpName = $('inpName'), inpThai = $('inpThai'), inpTrad = $('inpTrad');
+const icoSym = $('icoSymbol'), icoName = $('icoName'), icoThai = $('icoThai'), icoTrad = $('icoTrad');
 const grpBadge = $('groupBadge'), perTag = $('periodTag'), progText = $('progressText');
 const btnCheck = $('btnCheck'), btnAns = $('btnAnswer'), btnNext = $('btnNext');
-const thaiGrp = $('thaiGroup');
+const thaiGrp = $('thaiGroup'), tradGrp = $('tradGroup');
 const correctSpan = $('correctCount'), wrongSpan = $('wrongCount');
 const currNum = $('currentNum'), totalNum = $('totalNum');
 
@@ -366,22 +373,20 @@ function showQuestion(n){
   perTag.textContent = `คาบ ${e.p}`;
   progText.textContent = `ข้อ ${idx+1}/${all.length}`;
 
-  // thai field visibility & reference text
-  const refDiv = thaiGrp.querySelector('.ref-thai');
-  if( NEEDS_THAI.has(e.sym) ){
-    thaiGrp.style.display = 'block';
-    thaiGrp.querySelector('label').textContent = 'ชื่อภาษาไทย (ชื่อบัญญัติ)';
-    inpThai.placeholder = 'เช่น ' + e.th;
-    refDiv.textContent = '';
+  // thai fields
+  thaiGrp.style.display = 'block';
+  inpThai.placeholder = 'เช่น ' + e.th;
+  if( HAS_TRAD_THAI.has(e.sym) ){
+    tradGrp.style.display = 'block';
+    inpTrad.placeholder = 'เช่น ' + (e.thSp||'');
   } else {
-    thaiGrp.style.display = 'none';
-    refDiv.innerHTML = 'ชื่อไทย: <strong>' + e.th + '</strong>';
+    tradGrp.style.display = 'none';
   }
 
   // clear inputs
-  inpSym.value = ''; inpName.value = ''; inpThai.value = '';
-  [inpSym,inpName,inpThai].forEach(el => { el.className=''; });
-  [icoSym,icoName,icoThai].forEach(el => { el.className='icon'; });
+  inpSym.value = ''; inpName.value = ''; inpThai.value = ''; inpTrad.value = '';
+  [inpSym,inpName,inpThai,inpTrad].forEach(el => { if(el) el.className=''; });
+  [icoSym,icoName,icoThai,icoTrad].forEach(el => { el.className='icon'; });
 
   // buttons
   btnCheck.disabled = false;
@@ -428,15 +433,18 @@ function checkAnswer(){
 
   const okSym = s.toLowerCase() === e.sym.toLowerCase();
   const okName = n.toLowerCase() === e.en.toLowerCase();
-  const needsT = NEEDS_THAI.has(e.sym);
-  const okThai = needsT ? (t.toLowerCase() === e.th.toLowerCase()) : true;
+  const okThai = t.toLowerCase() === e.th.toLowerCase();
+  const hasTrad = HAS_TRAD_THAI.has(e.sym);
+  const trad = inpTrad.value.trim();
+  const okTrad = hasTrad ? (trad.toLowerCase() === (e.thSp||'').toLowerCase()) : true;
 
   // show results
   setField(inpSym, icoSym, okSym);
   setField(inpName, icoName, okName);
-  if(needsT) setField(inpThai, icoThai, okThai);
+  setField(inpThai, icoThai, okThai);
+  if(hasTrad) setField(inpTrad, icoTrad, okTrad);
 
-  const allOk = okSym && okName && okThai;
+  const allOk = okSym && okName && okThai && okTrad;
   done[idx] = allOk ? 'correct' : 'wrong';
   updateStats();
 
@@ -472,9 +480,11 @@ function showAnswer(){
   inpName.value = e.en;
   setField(inpSym, icoSym, true);
   setField(inpName, icoName, true);
-  if( NEEDS_THAI.has(e.sym) ){
-    inpThai.value = e.th;
-    setField(inpThai, icoThai, true);
+  inpThai.value = e.th;
+  setField(inpThai, icoThai, true);
+  if( HAS_TRAD_THAI.has(e.sym) && e.thSp){
+    inpTrad.value = e.thSp;
+    setField(inpTrad, icoTrad, true);
   }
   checked = true;
   done[idx] = 'wrong';
@@ -529,11 +539,12 @@ function restart(){
   btnNext.textContent = 'ถัดไป →';
 }
 
-// keyboard: Enter moves between inputs, Cmd+Enter checks
+// keyboard: Enter moves between inputs, then checks
 document.addEventListener('keydown', e => {
   if(e.key!=='Enter') return;
   if(e.target===inpSym){ inpName.focus(); e.preventDefault(); return; }
-  if(e.target===inpName && thaiGrp.style.display!=='none'){ inpThai.focus(); e.preventDefault(); return; }
+  if(e.target===inpName){ inpThai.focus(); e.preventDefault(); return; }
+  if(e.target===inpThai && tradGrp.style.display!=='none'){ inpTrad.focus(); e.preventDefault(); return; }
   if(!btnCheck.disabled){ checkAnswer(); e.preventDefault(); }
   else if(!btnNext.disabled){ nextQuestion(); e.preventDefault(); }
 });
