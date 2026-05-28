@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>จำตารางธาตุหมู่ A</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f5f7;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --sub: #86868b;
+  --border: #e5e5ea;
+  --green: #34c759;
+  --red: #ff3b30;
+  --blue: #007aff;
+  --blue-hover: #0066d6;
+  --radius: 14px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Prompt','Sukhumvit Set',-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;display:flex;justify-content:center;padding:20px;
+}
+.container{max-width:820px;width:100%}
+
+/* header */
+header{text-align:center;padding:24px 0 8px}
+header h1{font-size:26px;font-weight:600;letter-spacing:-0.3px}
+header p{color:var(--sub);font-size:13px;margin-top:2px}
+
+/* stats bar */
+.stats{
+  display:flex;justify-content:center;gap:20px;
+  padding:10px 0;font-size:14px;color:var(--sub);
+}
+.stats span{display:flex;align-items:center;gap:4px}
+.stats strong{color:var(--text);font-weight:600}
+
+/* table */
+.table-wrap{
+  overflow-x:auto;margin:8px 0 16px;
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:14px 10px;
+}
+.table-grid{
+  display:grid;
+  grid-template-columns:32px repeat(2,52px) 18px repeat(6,52px);
+  gap:3px;justify-content:center;
+}
+.table-grid .group-label{
+  font-size:10px;font-weight:600;text-align:center;
+  padding:3px 0;color:var(--sub);
+}
+.table-grid .period-label{
+  font-size:9px;text-align:center;color:var(--sub);align-self:center;
+}
+.table-grid .cell{
+  width:52px;height:40px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:500;cursor:default;transition:all .15s;
+  background:#f0f0f0;color:var(--sub);
+}
+.table-grid .cell.active{
+  transform:scale(1.08);box-shadow:0 0 0 3px var(--blue);
+  font-weight:700;color:#fff;
+}
+.table-grid .cell.done-correct{
+  opacity:0.5;background:var(--green);color:#fff;
+}
+.table-grid .cell.done-wrong{
+  opacity:0.5;background:var(--red);color:#fff;
+}
+.table-grid .cell.empty{background:transparent}
+.table-grid .cell.g1{background:#ffe0e0;color:#c0392b}
+.table-grid .cell.g2{background:#fff3cd;color:#856404}
+.table-grid .cell.g13{background:#d4edda;color:#155724}
+.table-grid .cell.g14{background:#cce5ff;color:#004085}
+.table-grid .cell.g15{background:#e8daef;color:#6c3483}
+.table-grid .cell.g16{background:#fdebd0;color:#a04000}
+.table-grid .cell.g17{background:#d1f2eb;color:#0e6251}
+.table-grid .cell.g18{background:#eaecee;color:#566573}
+
+/* quiz card */
+.quiz-card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:28px 32px;margin-top:8px;
+}
+.quiz-head{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.quiz-head .badge{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 14px;border-radius:20px;
+  font-size:13px;font-weight:600;color:#fff;
+}
+.quiz-head .period-tag{font-size:13px;color:var(--sub)}
+.quiz-progress{font-size:13px;color:var(--sub);margin-left:auto}
+
+.input-group{margin-bottom:14px;position:relative}
+.input-group label{display:block;font-size:13px;font-weight:500;margin-bottom:4px;color:var(--sub)}
+.input-group .input-wrap{position:relative;display:flex;align-items:center}
+.input-group input{
+  width:100%;padding:10px 14px;border:2px solid var(--border);
+  border-radius:10px;font-size:15px;font-family:inherit;
+  outline:none;transition:border-color .2s;background:#fafafa;
+}
+.input-group input:focus{border-color:var(--blue)}
+.input-group .icon{
+  position:absolute;right:12px;font-size:18px;font-weight:600;
+  display:none;
+}
+.input-group .icon.show{display:block}
+.input-group .icon.correct{color:var(--green)}
+.input-group .icon.wrong{color:var(--red)}
+.input-group input.correct{border-color:var(--green);background:#f0fff4}
+.input-group input.wrong{border-color:var(--red);background:#fff5f5}
+.input-group .ref-thai{
+  margin-top:4px;font-size:12px;color:var(--sub);
+}
+.ref-thai strong{color:var(--text)}
+
+/* buttons */
+.btn-group{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.btn{
+  flex:1;min-width:100px;padding:11px 18px;border:none;
+  border-radius:10px;font-size:14px;font-weight:600;
+  font-family:inherit;cursor:pointer;transition:all .15s;
+  text-align:center;
+}
+.btn:disabled{opacity:0.4;cursor:default}
+.btn-check{background:var(--blue);color:#fff}
+.btn-check:hover:not(:disabled){background:var(--blue-hover)}
+.btn-answer{background:#e8e8ed;color:var(--text)}
+.btn-answer:hover:not(:disabled){background:#d1d1d6}
+.btn-next{background:var(--green);color:#fff}
+.btn-next:hover:not(:disabled){background:#2db84e}
+
+/* summary */
+.summary{
+  display:none;background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:40px;text-align:center;margin-top:16px;
+}
+.summary.show{display:block}
+.summary h2{font-size:22px;margin-bottom:6px}
+.summary .score-big{font-size:52px;font-weight:700;margin:8px 0}
+.summary .score-big.good{color:var(--green)}
+.summary .score-big.ok{color:#f59e0b}
+.summary .score-big.bad{color:var(--red)}
+.summary .detail{margin-top:4px;font-size:14px;color:var(--sub)}
+.summary .btn-restart{margin-top:20px;padding:12px 36px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s}
+.summary .btn-restart:hover{background:var(--blue-hover)}
+
+/* responsive */
+@media(max-width:600px){
+  .table-grid{grid-template-columns:24px repeat(2,40px) 10px repeat(6,40px);gap:2px}
+  .table-grid .cell{width:40px;height:32px;font-size:11px}
+  .quiz-card{padding:20px 16px}
+  .btn{min-width:80px;padding:10px 12px;font-size:13px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <h1>ตารางธาตุหมู่ A</h1>
+  <p>ทบทวนหมู่ IA – VIIIA · สัญลักษณ์ · ชื่ออังกฤษ · ชื่อไทย</p>
+</header>
+
+<div class="stats" id="stats">
+  <span>✓ ถูก <strong id="correctCount">0</strong></span>
+  <span>✗ ผิด <strong id="wrongCount">0</strong></span>
+  <span>ข้อ <strong id="currentNum">1</strong> / <strong id="totalNum">0</strong></span>
+</div>
+
+<!-- mini table -->
+<div class="table-wrap" id="tableWrap">
+  <div class="table-grid" id="tableGrid"></div>
+</div>
+
+<!-- quiz -->
+<div class="quiz-card" id="quizCard">
+  <div class="quiz-head">
+    <span class="badge" id="groupBadge">หมู่ IA</span>
+    <span class="period-tag" id="periodTag">คาบ 1</span>
+    <span class="quiz-progress" id="progressText">ข้อ 1/44</span>
+  </div>
+
+  <div class="input-group">
+    <label>สัญลักษณ์ธาตุ</label>
+    <div class="input-wrap">
+      <input type="text" id="inpSymbol" placeholder="เช่น H" autocomplete="off" spellcheck="false">
+      <span class="icon" id="icoSymbol"></span>
+    </div>
+  </div>
+
+  <div class="input-group">
+    <label>ชื่อภาษาอังกฤษ</label>
+    <div class="input-wrap">
+      <input type="text" id="inpName" placeholder="เช่น Hydrogen" autocomplete="off" spellcheck="false">
+      <span class="icon" id="icoName"></span>
+    </div>
+  </div>
+
+  <div class="input-group" id="thaiGroup">
+    <label>ชื่อภาษาไทย</label>
+    <div class="input-wrap">
+      <input type="text" id="inpThai" placeholder="เช่น ไฮโดรเจน" autocomplete="off" spellcheck="false">
+      <span class="icon" id="icoThai"></span>
+    </div>
+    <div class="ref-thai"></div>
+  </div>
+
+  <div class="btn-group">
+    <button class="btn btn-check" id="btnCheck" onclick="checkAnswer()">ตรวจ</button>
+    <button class="btn btn-answer" id="btnAnswer" onclick="showAnswer()">เฉลย</button>
+    <button class="btn btn-next" id="btnNext" onclick="nextQuestion()" disabled>ถัดไป →</button>
+  </div>
+</div>
+
+<!-- summary -->
+<div class="summary" id="summary">
+  <h2>🎉 ทำครบทุกข้อแล้ว!</h2>
+  <div class="score-big good" id="finalScore">0/0</div>
+  <div class="detail" id="finalDetail"></div>
+  <button class="btn-restart" onclick="restart()">เริ่มใหม่</button>
+</div>
+</div>
+
+<script>
+// ─── DATA ───
+const G = [
+  { n:1, l:'IA',  cl:'g1', els:[
+    {sym:'H', en:'Hydrogen',   th:'ไฮโดรเจน',   p:1},
+    {sym:'Li',en:'Lithium',    th:'ลิเทียม',     p:2},
+    {sym:'Na',en:'Sodium',     th:'โซเดียม',     p:3},
+    {sym:'K', en:'Potassium',  th:'โพแทสเซียม',  p:4},
+    {sym:'Rb',en:'Rubidium',   th:'รูบิเดียม',   p:5},
+    {sym:'Cs',en:'Caesium',    th:'ซีเซียม',     p:6},
+    {sym:'Fr',en:'Francium',   th:'แฟรนเซียม',   p:7},
+  ]},
+  { n:2, l:'IIA', cl:'g2', els:[
+    {sym:'Be',en:'Beryllium',  th:'เบริลเลียม',  p:2},
+    {sym:'Mg',en:'Magnesium',  th:'แมกนีเซียม',  p:3},
+    {sym:'Ca',en:'Calcium',    th:'แคลเซียม',    p:4},
+    {sym:'Sr',en:'Strontium',  th:'สตรอนเชียม',  p:5},
+    {sym:'Ba',en:'Barium',     th:'แบเรียม',     p:6},
+    {sym:'Ra',en:'Radium',     th:'เรเดียม',     p:7},
+  ]},
+  { n:13,l:'IIIA',cl:'g13', els:[
+    {sym:'B', en:'Boron',      th:'โบรอน',       p:2},
+    {sym:'Al',en:'Aluminium',  th:'อะลูมิเนียม',  p:3},
+    {sym:'Ga',en:'Gallium',    th:'แกลเลียม',    p:4},
+    {sym:'In',en:'Indium',     th:'อินเดียม',     p:5},
+    {sym:'Tl',en:'Thallium',   th:'แทลเลียม',    p:6},
+  ]},
+  { n:14,l:'IVA', cl:'g14', els:[
+    {sym:'C', en:'Carbon',     th:'คาร์บอน',     p:2},
+    {sym:'Si',en:'Silicon',    th:'ซิลิคอน',     p:3},
+    {sym:'Ge',en:'Germanium',  th:'เจอร์เมเนียม', p:4},
+    {sym:'Sn',en:'Tin',        th:'ดีบุก',       p:5},
+    {sym:'Pb',en:'Lead',       th:'ตะกั่ว',      p:6},
+  ]},
+  { n:15,l:'VA',  cl:'g15', els:[
+    {sym:'N', en:'Nitrogen',   th:'ไนโตรเจน',    p:2},
+    {sym:'P', en:'Phosphorus', th:'ฟอสฟอรัส',    p:3},
+    {sym:'As',en:'Arsenic',    th:'สารหนู',      p:4},
+    {sym:'Sb',en:'Antimony',   th:'พลวง',        p:5},
+    {sym:'Bi',en:'Bismuth',    th:'บิสมัท',      p:6},
+  ]},
+  { n:16,l:'VIA', cl:'g16', els:[
+    {sym:'O', en:'Oxygen',     th:'ออกซิเจน',    p:2},
+    {sym:'S', en:'Sulfur',     th:'กำมะถัน',     p:3},
+    {sym:'Se',en:'Selenium',   th:'ซีลีเนียม',    p:4},
+    {sym:'Te',en:'Tellurium',  th:'เทลลูเรียม',   p:5},
+    {sym:'Po',en:'Polonium',   th:'พอโลเนียม',   p:6},
+  ]},
+  { n:17,l:'VIIA',cl:'g17', els:[
+    {sym:'F', en:'Fluorine',   th:'ฟลูออรีน',    p:2},
+    {sym:'Cl',en:'Chlorine',   th:'คลอรีน',      p:3},
+    {sym:'Br',en:'Bromine',    th:'โบรมีน',      p:4},
+    {sym:'I', en:'Iodine',     th:'ไอโอดีน',     p:5},
+    {sym:'At',en:'Astatine',   th:'แอสทาทีน',    p:6},
+  ]},
+  { n:18,l:'VIIIA',cl:'g18', els:[
+    {sym:'He',en:'Helium',     th:'ฮีเลียม',     p:1},
+    {sym:'Ne',en:'Neon',       th:'นีออน',       p:2},
+    {sym:'Ar',en:'Argon',      th:'อาร์กอน',     p:3},
+    {sym:'Kr',en:'Krypton',    th:'คริปทอน',    p:4},
+    {sym:'Xe',en:'Xenon',      th:'ซีนอน',      p:5},
+    {sym:'Rn',en:'Radon',      th:'เรดอน',       p:6},
+  ]},
+];
+
+// elements that require Thai name input
+const NEEDS_THAI = new Set(['S','As','Sn','Sb','Pb']);
+
+// flat list + index map for table building
+const elIdx = new Map();
+const all = [];
+G.forEach(g => {
+  g.els.forEach(e => {
+    elIdx.set(e, all.length);
+    all.push({ ...e, group:g.n, groupLabel:g.l, groupCls:g.cl });
+  });
+});
+
+// ─── STATE ───
+let idx = 0;
+let done = [];   // state per element: null | 'correct' | 'wrong'
+let checked = false;
+
+const $ = id => document.getElementById(id);
+const inpSym = $('inpSymbol'), inpName = $('inpName'), inpThai = $('inpThai');
+const icoSym = $('icoSymbol'), icoName = $('icoName'), icoThai = $('icoThai');
+const grpBadge = $('groupBadge'), perTag = $('periodTag'), progText = $('progressText');
+const btnCheck = $('btnCheck'), btnAns = $('btnAnswer'), btnNext = $('btnNext');
+const thaiGrp = $('thaiGroup');
+const correctSpan = $('correctCount'), wrongSpan = $('wrongCount');
+const currNum = $('currentNum'), totalNum = $('totalNum');
+
+function init(){
+  totalNum.textContent = all.length;
+  buildTable();
+  showQuestion(0);
+}
+
+// ─── TABLE ───
+function buildTable(){
+  const grid = $('tableGrid');
+  const periods = [1,2,3,4,5,6,7];
+  // header row
+  let html = '<div class="period-label"></div>';
+  html += '<div class="group-label">IA</div><div class="group-label">IIA</div><div class="group-label"></div>';
+  html += '<div class="group-label">IIIA</div><div class="group-label">IVA</div><div class="group-label">VA</div>';
+  html += '<div class="group-label">VIA</div><div class="group-label">VIIA</div><div class="group-label">VIIIA</div>';
+  // data rows
+  periods.forEach(p => {
+    html += `<div class="period-label">${p}</div>`;
+    for(let gi=0; gi<G.length; gi++){
+      const g = G[gi];
+      // spacer col after group 2
+      if(gi===2) html += '<div class="cell empty"></div>';
+      const el = g.els.find(e => e.p === p);
+      if(el){
+        const ei = elIdx.get(el);
+        html += `<div class="cell ${g.cl}" data-idx="${ei}" id="cell-${ei}">${el.sym}</div>`;
+      } else {
+        html += '<div class="cell empty"></div>';
+      }
+    }
+  });
+  grid.innerHTML = html;
+}
+
+// ─── QUESTION ───
+function showQuestion(n){
+  idx = n;
+  checked = false;
+  const e = all[idx];
+  // badge
+  grpBadge.textContent = `หมู่ ${e.group} (${e.groupLabel})`;
+  const colors = {1:'#ff6b6b',2:'#ffd93d',13:'#6bcb77',14:'#4d96ff',15:'#9b59b6',16:'#e67e22',17:'#1abc9c',18:'#95a5a6'};
+  grpBadge.style.background = colors[e.group] || '#888';
+  perTag.textContent = `คาบ ${e.p}`;
+  progText.textContent = `ข้อ ${idx+1}/${all.length}`;
+
+  // thai field visibility & reference text
+  const refDiv = thaiGrp.querySelector('.ref-thai');
+  if( NEEDS_THAI.has(e.sym) ){
+    thaiGrp.style.display = 'block';
+    thaiGrp.querySelector('label').textContent = 'ชื่อภาษาไทย (ชื่อบัญญัติ)';
+    inpThai.placeholder = 'เช่น ' + e.th;
+    refDiv.textContent = '';
+  } else {
+    thaiGrp.style.display = 'none';
+    refDiv.innerHTML = 'ชื่อไทย: <strong>' + e.th + '</strong>';
+  }
+
+  // clear inputs
+  inpSym.value = ''; inpName.value = ''; inpThai.value = '';
+  [inpSym,inpName,inpThai].forEach(el => { el.className=''; });
+  [icoSym,icoName,icoThai].forEach(el => { el.className='icon'; });
+
+  // buttons
+  btnCheck.disabled = false;
+  btnAns.disabled = false;
+  btnNext.disabled = true;
+  btnCheck.textContent = 'ตรวจ';
+
+  // stats
+  updateStats();
+
+  // highlight table cell
+  document.querySelectorAll('.cell').forEach(c => c.classList.remove('active'));
+  const activeCell = $('cell-'+idx);
+  if(activeCell) activeCell.classList.add('active');
+
+  // focus first input
+  setTimeout(() => inpSym.focus(), 100);
+}
+
+function updateStats(){
+  const corr = done.filter(s => s==='correct').length;
+  const wrg = done.filter(s => s==='wrong').length;
+  correctSpan.textContent = corr;
+  wrongSpan.textContent = wrg;
+  currNum.textContent = idx+1;
+
+  // update table cells
+  all.forEach((_,i) => {
+    const cell = $('cell-'+i);
+    if(!cell) return;
+    cell.classList.remove('done-correct','done-wrong');
+    if(done[i]==='correct') cell.classList.add('done-correct');
+    else if(done[i]==='wrong') cell.classList.add('done-wrong');
+  });
+}
+
+// ─── CHECK ───
+function checkAnswer(){
+  if(checked) return;
+  const e = all[idx];
+  const s = inpSym.value.trim();
+  const n = inpName.value.trim();
+  const t = inpThai.value.trim();
+
+  const okSym = s.toLowerCase() === e.sym.toLowerCase();
+  const okName = n.toLowerCase() === e.en.toLowerCase();
+  const needsT = NEEDS_THAI.has(e.sym);
+  const okThai = needsT ? (t.toLowerCase() === e.th.toLowerCase()) : true;
+
+  // show results
+  setField(inpSym, icoSym, okSym);
+  setField(inpName, icoName, okName);
+  if(needsT) setField(inpThai, icoThai, okThai);
+
+  const allOk = okSym && okName && okThai;
+  done[idx] = allOk ? 'correct' : 'wrong';
+  updateStats();
+
+  checked = true;
+  btnCheck.disabled = true;
+  btnAns.disabled = true;
+  btnNext.disabled = false;
+
+  // update table cell
+  const cell = $('cell-'+idx);
+  if(cell){
+    cell.classList.remove('active');
+    cell.classList.add(allOk ? 'done-correct' : 'done-wrong');
+  }
+
+  // if last question, change button
+  if(idx === all.length-1){
+    btnNext.textContent = 'ดูผลลัพธ์';
+    btnNext.onclick = showSummary;
+  }
+}
+
+function setField(inp, ico, ok){
+  inp.className = ok ? 'correct' : 'wrong';
+  ico.className = 'icon show ' + (ok ? 'correct' : 'wrong');
+  ico.textContent = ok ? '✓' : '✗';
+}
+
+// ─── SHOW ANSWER ───
+function showAnswer(){
+  const e = all[idx];
+  inpSym.value = e.sym;
+  inpName.value = e.en;
+  setField(inpSym, icoSym, true);
+  setField(inpName, icoName, true);
+  if( NEEDS_THAI.has(e.sym) ){
+    inpThai.value = e.th;
+    setField(inpThai, icoThai, true);
+  }
+  checked = true;
+  done[idx] = 'wrong';
+  btnCheck.disabled = true;
+  btnAns.disabled = true;
+  btnNext.disabled = false;
+  updateStats();
+  const cell = $('cell-'+idx);
+  if(cell){
+    cell.classList.remove('active');
+    cell.classList.add('done-wrong');
+  }
+  if(idx === all.length-1){
+    btnNext.textContent = 'ดูผลลัพธ์';
+    btnNext.onclick = showSummary;
+  }
+}
+
+// ─── NEXT ───
+function nextQuestion(){
+  if(idx < all.length-1){
+    showQuestion(idx+1);
+    btnNext.onclick = nextQuestion;
+    btnNext.textContent = 'ถัดไป →';
+  } else {
+    showSummary();
+  }
+}
+
+// ─── SUMMARY ───
+function showSummary(){
+  $('quizCard').style.display = 'none';
+  $('tableWrap').style.display = 'none';
+  const s = $('summary');
+  s.classList.add('show');
+  const corr = done.filter(x => x==='correct').length;
+  const total = all.length;
+  const pct = Math.round(corr/total*100);
+  $('finalScore').textContent = `${corr}/${total}`;
+  $('finalScore').className = 'score-big ' + (pct>=80?'good':pct>=50?'ok':'bad');
+  $('finalDetail').textContent = `ถูก ${corr} ข้อ · ผิด ${total-corr} ข้อ · คิดเป็น ${pct}%`;
+}
+
+function restart(){
+  done = [];
+  idx = 0;
+  $('summary').classList.remove('show');
+  $('quizCard').style.display = 'block';
+  $('tableWrap').style.display = 'block';
+  showQuestion(0);
+  btnNext.onclick = nextQuestion;
+  btnNext.textContent = 'ถัดไป →';
+}
+
+// keyboard: Enter moves between inputs, Cmd+Enter checks
+document.addEventListener('keydown', e => {
+  if(e.key!=='Enter') return;
+  if(e.target===inpSym){ inpName.focus(); e.preventDefault(); return; }
+  if(e.target===inpName && thaiGrp.style.display!=='none'){ inpThai.focus(); e.preventDefault(); return; }
+  if(!btnCheck.disabled){ checkAnswer(); e.preventDefault(); }
+  else if(!btnNext.disabled){ nextQuestion(); e.preventDefault(); }
+});
+
+init();
+</script>
+</body>
+</html>
